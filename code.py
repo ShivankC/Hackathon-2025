@@ -6,7 +6,6 @@ import random
 from datetime import datetime
 import openai
 
-# Page configuration with enhanced styling
 st.set_page_config(
     page_title="MindfulStudy Hub",
     page_icon="🧘‍♀️",
@@ -14,7 +13,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Inject JavaScript for badge celebration and overview at the top level
 st.markdown("""
 <script>
 function triggerBadgeCelebration(badgeName, badgeEmoji) {
@@ -159,7 +157,6 @@ window.closeBadgeOverview = closeBadgeOverview;
 </script>
 """, unsafe_allow_html=True)
 
-# Custom CSS for fun, colorful Duolingo-style interface with guide
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Inter:wght@300;400;500;600;700&display=swap');
@@ -803,7 +800,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state for data persistence
 if 'points' not in st.session_state:
     st.session_state.points = 0
 if 'moods' not in st.session_state:
@@ -821,7 +817,6 @@ if 'badge_celebration' not in st.session_state:
 if 'previous_badges' not in st.session_state:
     st.session_state.previous_badges = []
 
-# Initialize timer state
 if 'timer_running' not in st.session_state:
     st.session_state.timer_running = False
 if 'timer_seconds' not in st.session_state:
@@ -831,7 +826,6 @@ if 'timer_mode' not in st.session_state:
 if 'last_timer_update' not in st.session_state:
     st.session_state.last_timer_update = time.time()
 
-# Initialize music state
 if 'music_playing' not in st.session_state:
     st.session_state.music_playing = False
 if 'current_track' not in st.session_state:
@@ -839,13 +833,10 @@ if 'current_track' not in st.session_state:
 if 'volume' not in st.session_state:
     st.session_state.volume = 0.5
 
-# Check if floating button was clicked to open chatbot
 if 'open_chatbot' in st.query_params:
     st.session_state.current_section = "chatbot"
-    # Clear the URL parameter
     st.query_params.clear()
 
-# Wellness Adventure Map - Gamification System
 def get_level_and_badges(points):
     """Determine user level and badges based on points"""
     levels = {
@@ -886,29 +877,24 @@ def check_for_new_badges(points):
     """Check if user earned new badges and trigger celebration"""
     current_level, current_badges, badge_emojis = get_level_and_badges(points)
     
-    # Check for new badges
     new_badges = []
     for badge in current_badges:
         if badge not in st.session_state.previous_badges:
             new_badges.append(badge)
     
-    # Update previous badges
     st.session_state.previous_badges = current_badges.copy()
     
-    # Trigger celebration for new badges
     for badge in new_badges:
         if badge in badge_emojis:
             st.session_state.badge_celebration = {
                 'name': badge,
                 'emoji': badge_emojis[badge]
             }
-            # Redirect to home
             st.session_state.current_section = "home"
             st.success(f"🎉 NEW BADGE EARNED: {badge}!")
     
     return new_badges
 
-# Daily tips for screen balance
 DAILY_TIPS = [
     "📱 Take a 20-minute screen break every 2 hours to reduce eye strain",
     "🌙 Avoid screens 1 hour before bedtime for better sleep quality",
@@ -920,7 +906,6 @@ DAILY_TIPS = [
     "🧘‍♀️ Practice mindfulness for 5 minutes when feeling overwhelmed by screens"
 ]
 
-# Non-screen activity suggestions for Pomodoro breaks
 BREAK_ACTIVITIES = [
     "🧘‍♀️ Do a quick 5-minute meditation",
     "💪 Take a short walk around your room",
@@ -934,7 +919,7 @@ BREAK_ACTIVITIES = [
     "🎯 Organize your study space for 5 minutes"
 ]
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
 
 def show_how_to_use_section():
     """How to Use section with comprehensive guide"""
@@ -950,7 +935,6 @@ def show_how_to_use_section():
     </div>
     """, unsafe_allow_html=True)
     
-    # Feature explanations
     col1, col2 = st.columns(2)
     
     with col1:
@@ -1027,7 +1011,6 @@ def show_how_to_use_section():
         </div>
         """, unsafe_allow_html=True)
     
-    # Tips and best practices
     st.markdown("### 💡 Tips for Best Results")
     
     col1, col2 = st.columns(2)
@@ -1054,7 +1037,6 @@ def show_how_to_use_section():
             st.markdown("**💬 Seek Support**")
             st.write("Use the AI Therapist when you need someone to talk to or want to explore your feelings.")
     
-    # Navigation guide
     st.markdown("### 🧭 Navigation Guide")
     st.write("Use the sidebar navigation to explore different features. Each section is designed to support a specific aspect of your wellness journey:")
     
@@ -1091,12 +1073,10 @@ def show_how_to_use_section():
         st.write("Mental health support chat")
 
 def main():
-    # Add loading screen
     if 'loading_complete' not in st.session_state:
         st.session_state.loading_complete = False
     
     if not st.session_state.loading_complete:
-        # Show loading screen
         st.markdown("""
         <div id="loading-screen" style="
             position: fixed;
@@ -1206,14 +1186,12 @@ def main():
         </script>
         """, unsafe_allow_html=True)
         
-        # Set loading complete after 4 seconds
         time.sleep(4)
         st.session_state.loading_complete = True
         st.rerun()
     
 
     
-    # Add floating AI therapist button
     st.markdown("""
     <div class="guide-character" onclick="openAIChat()">
         🧘‍♀️
@@ -1235,10 +1213,8 @@ def main():
     </script>
     """, unsafe_allow_html=True)
     
-    # Check for new badges and display celebration if needed
     if st.session_state.badge_celebration:
         celebration = st.session_state.badge_celebration
-        # Trigger the badge celebration
         st.markdown(f"""
         <script>
         console.log('Triggering badge celebration for: {celebration['name']}');
@@ -1246,7 +1222,6 @@ def main():
         </script>
         """, unsafe_allow_html=True)
         
-        # Show prominent badge notification
         st.markdown(f"""
         <div style="
             position: fixed;
@@ -1278,13 +1253,10 @@ def main():
         </style>
         """, unsafe_allow_html=True)
         
-        # Show balloons after the badge celebration
         st.balloons()
         st.session_state.badge_celebration = None
     
-    # Sidebar navigation
     with st.sidebar:
-        # Current level at the very top
         current_level, badges, _ = get_level_and_badges(st.session_state.points)
         st.markdown(f"""
         <div style="
@@ -1309,7 +1281,6 @@ def main():
         
 
         
-        # Navigation buttons
         if st.button("📚 How to Use", use_container_width=True, disabled=st.session_state.timer_running):
             st.session_state.current_section = "how_to_use"
             st.rerun()
@@ -1341,7 +1312,6 @@ def main():
             st.session_state.current_section = "chatbot"
             st.rerun()
         st.markdown("---")
-        # Current status in sidebar
         st.markdown(f"""
         <div style="background: white; padding: 20px; border-radius: 20px; margin: 20px 0;">
             <h4 style="color: #4ade80; text-align: center;">🌟 Current Status</h4>
@@ -1355,20 +1325,16 @@ def main():
         </div>
         """, unsafe_allow_html=True)
     
-    # Initialize current section if not set
     if 'current_section' not in st.session_state:
         st.session_state.current_section = "home"
     
-    # Persistent calm points display on every page
     current_level, badges, _ = get_level_and_badges(st.session_state.points)
     col1, col2, col3 = st.columns([3, 1, 1])
     
     with col1:
-        # Empty space for main content
         pass
     
     with col2:
-        # Persistent calm points display
         st.markdown(f"""
         <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: linear-gradient(135deg, #4ade80 0%, #60a5fa 50%, #f97316 100%); 
                     color: white; padding: 15px; border-radius: 25px; box-shadow: 0 4px 15px rgba(74,222,128,0.3); 
@@ -1387,10 +1353,8 @@ def main():
         """, unsafe_allow_html=True)
     
     with col3:
-        # Empty space
         pass
     
-    # Main content area
     if st.session_state.current_section == "home":
         show_home_section()
     elif st.session_state.current_section == "tracking":
@@ -1418,12 +1382,9 @@ def show_home_section():
     st.markdown('<h1 class="main-title">🧘‍♀️ MindfulStudy Hub</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">Your Wellness Adventure - Learn & Grow! 🚀</p>', unsafe_allow_html=True)
     
-    # Display current level and points with fun styling
     current_level, badges, _ = get_level_and_badges(st.session_state.points)
     
-    # Fun badge display
     if badges:
-        # Define badge information
         badge_info = {
             "🌟 First Steps": {
                 "emoji": "🌟",
@@ -1454,7 +1415,6 @@ def show_home_section():
         
 
         
-        # Display badges in a simple widget
         st.markdown(f"""
         <div class="fun-card" style="text-align: center;">
             <h3 style="color: #58cc02; margin-bottom: 15px; font-family: 'Fredoka One', cursive; font-size: 1.5rem;">🏆 Your Awesome Badges!</h3>
@@ -1483,7 +1443,6 @@ def show_home_section():
         </div>
         """, unsafe_allow_html=True)
     
-    # Fun progress cards
     col1, col2 = st.columns([1, 1])
     
     with col1:
@@ -1511,7 +1470,6 @@ def show_home_section():
     
     st.markdown('<div class="stDivider"></div>', unsafe_allow_html=True)
     
-    # Fun daily tip
     tip = random.choice(DAILY_TIPS)
     st.markdown(f"""
     <div class="fun-card">
@@ -1565,7 +1523,6 @@ def show_tracking_section():
                 st.success("🎉 Great job keeping screen time balanced!")
                 st.session_state.points += 5
             
-            # Check for new badges
             check_for_new_badges(st.session_state.points)
             
             st.balloons()
@@ -1586,7 +1543,6 @@ def show_tracking_section():
             elif mood <= 3:
                 st.info("🤗 Remember, it's okay to not be okay. Consider trying the breathing exercise.")
             
-            # Check for new badges
             check_for_new_badges(st.session_state.points)
             
             st.balloons()
@@ -1612,7 +1568,6 @@ def show_gratitude_section():
             st.session_state.points += 10
             st.success("🙏 Thank you for sharing your gratitude!")
             
-            # Check for new badges
             check_for_new_badges(st.session_state.points)
             
             st.balloons()
@@ -1621,25 +1576,19 @@ def show_gratitude_section():
             st.error("Please write something before submitting.")
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # Display past gratitude entries with enhanced styling
     if st.session_state.gratitudes:
         st.markdown('<div class="floating-widget">', unsafe_allow_html=True)
         st.write("**🌟 Your Gratitude Journey:**")
-        # Book-like journal interface
         if len(st.session_state.gratitudes) > 0:
-            # Initialize page tracking
             if 'journal_page' not in st.session_state:
                 st.session_state.journal_page = 0
             
-            # Reset animation flag after page loads
             if st.session_state.get('page_changed', False):
                 st.session_state.page_changed = False
             
-            # Calculate total pages (1 entry per page)
             entries_per_page = 1
             total_pages = max(1, len(st.session_state.gratitudes))
             
-            # Navigation controls
             col1, col2, col3 = st.columns([1, 2, 1])
             with col1:
                 if st.button("◀ Previous", disabled=st.session_state.journal_page == 0, use_container_width=True):
@@ -1661,7 +1610,6 @@ def show_gratitude_section():
                     st.session_state.page_changed = True
                     st.rerun()
             
-            # Book container with animation
             st.markdown("""
             <style>
             @keyframes pageFlip {
@@ -1809,12 +1757,10 @@ def show_gratitude_section():
             </style>
             """, unsafe_allow_html=True)
             
-            # Get entries for current page
             start_idx = st.session_state.journal_page * entries_per_page
             end_idx = min(start_idx + entries_per_page, len(st.session_state.gratitudes))
             page_entries = list(reversed(st.session_state.gratitudes))[start_idx:end_idx]
             
-            # Display book pages with animation
             if st.session_state.get('page_changed', False):
                 with st.spinner("📖 Flipping page..."):
                     time.sleep(0.3)  # Brief pause for animation effect
@@ -1822,7 +1768,6 @@ def show_gratitude_section():
             st.markdown('<div class="journal-book">', unsafe_allow_html=True)
             
             for i, entry in enumerate(page_entries):
-                # Add animation class based on page change
                 animation_class = "animate" if st.session_state.get('page_changed', False) else ""
                 st.markdown(f"""
                 <div class="journal-page {animation_class}">
@@ -1838,7 +1783,6 @@ def show_gratitude_section():
             
             st.markdown('</div>', unsafe_allow_html=True)
             
-            # Empty state for no entries
             if len(page_entries) == 0:
                 st.markdown("""
                 <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%); 
@@ -1859,10 +1803,8 @@ def show_breathing_section():
     if st.button("🫁 Start Breathing Exercise", key="breathing_btn", use_container_width=True):
         st.session_state.breathing_completed += 1
         
-        # Create a placeholder for the breathing animation
         breath_placeholder = st.empty()
         
-        # Add breathing animation CSS
         st.markdown("""
         <style>
         .breathing-container {
@@ -1965,7 +1907,6 @@ def show_breathing_section():
         """, unsafe_allow_html=True)
         
         for i in range(3):
-            # Show breathing animation with text
             breath_placeholder.markdown(f"""
             <div class="breathing-container">
                 <div class="breathing-circle circle-1"></div>
@@ -2017,7 +1958,6 @@ def show_breathing_section():
         breath_placeholder.success("✨ Breathing exercise completed! You feel more centered.")
         st.session_state.points += 10
         
-        # Check for new badges
         check_for_new_badges(st.session_state.points)
         
         st.balloons()
@@ -2030,9 +1970,7 @@ def show_pomodoro_section():
     
 
     
-    # Timer display with animation
     if st.session_state.timer_running and st.session_state.timer_seconds > 0:
-        # Show running timer
         minutes = st.session_state.timer_seconds // 60
         seconds = st.session_state.timer_seconds % 60
         time_str = f"{minutes:02d}:{seconds:02d}"
@@ -2049,7 +1987,6 @@ def show_pomodoro_section():
         </div>
         """, unsafe_allow_html=True)
     else:
-        # Show ready timer
         st.markdown("""
         <div class="pomodoro-timer-container">
             <div class="timer-circle">
@@ -2060,7 +1997,6 @@ def show_pomodoro_section():
         </div>
         """, unsafe_allow_html=True)
     
-    # Add timer CSS
     st.markdown("""
     <style>
     .pomodoro-timer-container {
@@ -2186,7 +2122,6 @@ def show_pomodoro_section():
     </style>
     """, unsafe_allow_html=True)
     
-    # Timer controls
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -2209,45 +2144,36 @@ def show_pomodoro_section():
             st.session_state.timer_seconds = 0
             st.rerun()
     
-    # Show timer status when not running
     if not st.session_state.timer_running:
         st.info("⏰ Timer is ready! Click 'Start Focus' or 'Start Break' to begin a session.")
     
-    # Auto-refresh when timer is running
     if st.session_state.timer_running and st.session_state.timer_seconds > 0:
-        # Update timer every second using session state
         current_time = time.time()
         if current_time - st.session_state.last_timer_update >= 1.0:
             st.session_state.timer_seconds -= 1
             st.session_state.last_timer_update = current_time
         
-        # Auto-refresh the page every second when timer is running
         st.empty()
         time.sleep(1)
         st.rerun()
     
-    # Timer logic
     if st.session_state.timer_running and st.session_state.timer_seconds > 0:
-        # Show current timer status
         minutes = st.session_state.timer_seconds // 60
         seconds = st.session_state.timer_seconds % 60
         time_str = f"{minutes:02d}:{seconds:02d}"
         st.info(f"⏰ {st.session_state.timer_mode.title()} session in progress: {time_str}")
         
-        # Check if timer finished
         if st.session_state.timer_seconds <= 0:
             st.session_state.timer_running = False
             st.session_state.pomodoro_completed += 1
             st.session_state.points += 20 if st.session_state.timer_mode == 'focus' else 10
             
-            # Check for new badges
             check_for_new_badges(st.session_state.points)
             
             st.success(f"🎉 {st.session_state.timer_mode.title()} session completed!")
             st.balloons()
             st.rerun()
     
-    # Break activity suggestions
     st.markdown('<div class="widget-card">', unsafe_allow_html=True)
     st.write("**💡 Break Activity Suggestions:**")
     
@@ -2270,7 +2196,6 @@ def show_dashboard_section():
     st.markdown('<h1 class="section-title">📈 Progress Dashboard</h1>', unsafe_allow_html=True)
     
     if st.session_state.moods or st.session_state.screen_times:
-        # Create progress data
         data = []
         max_len = max(len(st.session_state.moods), len(st.session_state.screen_times))
         
@@ -2285,7 +2210,6 @@ def show_dashboard_section():
         
         df = pd.DataFrame(data)
         
-        # Display charts with enhanced styling
         col1, col2 = st.columns(2)
         
         with col1:
@@ -2306,7 +2230,6 @@ def show_dashboard_section():
                     st.line_chart(screen_data.set_index('Day')['Screen Time'])
                 st.markdown('</div>', unsafe_allow_html=True)
         
-        # Summary statistics with enhanced styling
         st.markdown('<div class="floating-widget">', unsafe_allow_html=True)
         st.write("**📊 Summary Statistics**")
         col1, col2, col3 = st.columns(3)
@@ -2336,7 +2259,6 @@ def show_activities_section():
     st.markdown('<div class="widget-card">', unsafe_allow_html=True)
     st.write("**Here are some evidence-based activities to try during your breaks:**")
     
-    # Display all break activities with enhanced styling
     for i, activity in enumerate(BREAK_ACTIVITIES, 1):
         st.markdown(f"""
         <div style="background: rgba(255,255,255,0.8); padding: 12px; border-radius: 12px; margin: 6px 0; border-left: 3px solid #4299e1; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
@@ -2347,11 +2269,9 @@ def show_activities_section():
     
     st.divider()
     
-    # Quick activity picker with enhanced styling
     st.markdown('<div class="floating-widget">', unsafe_allow_html=True)
     st.write("**🎲 Need a quick activity right now?**")
     
-    # Initialize random activity in session state
     if 'current_random_activity' not in st.session_state:
         st.session_state.current_random_activity = None
     
@@ -2359,13 +2279,11 @@ def show_activities_section():
         st.session_state.current_random_activity = random.choice(BREAK_ACTIVITIES)
         st.session_state.points += 5
         
-        # Check for new badges
         check_for_new_badges(st.session_state.points)
         
         st.balloons()
         st.rerun()
     
-    # Display the selected random activity
     if st.session_state.current_random_activity:
         st.markdown(f"""
         <div style="
@@ -2391,9 +2309,7 @@ def show_badges_section():
     
     current_level, current_badges, badge_emojis = get_level_and_badges(st.session_state.points)
     
-    # Define all possible badges with their requirements
     all_badges = {
-        # Beginner Badges (0-50 points)
         "🌟 First Steps": {
             "emoji": "🌟",
             "requirement": "Earn 10 points",
@@ -2413,7 +2329,6 @@ def show_badges_section():
             "points_needed": 50
         },
         
-        # Intermediate Badges (51-150 points)
         "🫁 Breath Master": {
             "emoji": "🫁",
             "requirement": "Complete 5 breathing exercises",
@@ -2445,7 +2360,6 @@ def show_badges_section():
             "points_needed": 130
         },
         
-        # Advanced Badges (151-300 points)
         "🎯 Focus Champion": {
             "emoji": "🎯",
             "requirement": "Complete 10 Pomodoro sessions",
@@ -2471,7 +2385,6 @@ def show_badges_section():
             "points_needed": 300
         },
         
-        # Special Achievement Badges
         "🔥 Streak Master": {
             "emoji": "🔥",
             "requirement": "Log activities for 30 consecutive days",
@@ -2606,7 +2519,6 @@ def show_badges_section():
         }
     }
     
-    # Display earned badges
     st.markdown('<div class="floating-widget">', unsafe_allow_html=True)
     st.write("**✅ Badges You've Earned:**")
     
@@ -2637,7 +2549,6 @@ def show_badges_section():
         st.info("No badges earned yet. Start your wellness journey to earn your first badge!")
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # Display unearned badges
     st.markdown('<div class="widget-card">', unsafe_allow_html=True)
     st.write("**🎯 Badges to Unlock:**")
     
@@ -2680,7 +2591,6 @@ def show_badges_section():
         st.success("🎉 Congratulations! You've earned all available badges!")
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # Tips for earning badges
     st.markdown('<div class="floating-widget">', unsafe_allow_html=True)
     st.write("**💡 Tips to Earn Badges Faster:**")
     st.markdown("""
@@ -2699,14 +2609,43 @@ def show_badges_section():
     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
+def get_fallback_response(user_input):
+    user_input_lower = user_input.lower()
+    
+    if any(word in user_input_lower for word in ['sad', 'depressed', 'down', 'unhappy', 'miserable']):
+        return "I'm sorry you're feeling down. Remember that it's okay to not be okay. Try taking a few deep breaths, going for a short walk, or talking to someone you trust. You're not alone in this. 💙"
+    
+    elif any(word in user_input_lower for word in ['anxious', 'worried', 'stress', 'nervous', 'panic']):
+        return "Anxiety can be really overwhelming. Try the 4-7-8 breathing technique: inhale for 4, hold for 7, exhale for 8. Also, remember that most worries don't come true. You're stronger than you think! 🌟"
+    
+    elif any(word in user_input_lower for word in ['tired', 'exhausted', 'burnout', 'overwhelmed']):
+        return "It sounds like you need some rest. Try taking a 20-minute break, doing something you enjoy, or just sitting quietly. It's okay to pause and recharge. You deserve it! 😌"
+    
+    elif any(word in user_input_lower for word in ['happy', 'good', 'great', 'excited', 'joy']):
+        return "That's wonderful! I'm so glad you're feeling good. Remember to savor these moments and maybe share your joy with someone else. Positive energy is contagious! ✨"
+    
+    elif any(word in user_input_lower for word in ['help', 'support', 'advice']):
+        return "I'm here to listen and support you. Remember that professional help is always available if you need it. You're taking a great step by reaching out. What's on your mind? 🤗"
+    
+    elif any(word in user_input_lower for word in ['study', 'work', 'school', 'exam', 'test']):
+        return "Academic stress is real! Try breaking your work into smaller chunks, take regular breaks, and remember that your worth isn't defined by grades. You're doing your best! 📚"
+    
+    else:
+        return "Thank you for sharing that with me. I'm here to listen and support you. Remember that your feelings are valid and you're doing great just by being here. Is there anything specific you'd like to talk about? 💙"
+
 def show_chatbot_section():
     st.markdown('<h1 class="section-title">💬 Therapy Chatbot</h1>', unsafe_allow_html=True)
     st.markdown('<div class="widget-card">', unsafe_allow_html=True)
-    st.write("This AI-powered chatbot is here to listen and support your mental health. All conversations are private and not stored.")
+    st.write("This supportive chatbot is here to listen and provide gentle encouragement. All conversations are private and not stored.")
+    
+
+    
     if 'chat_history' not in st.session_state:
         st.session_state.chat_history = []
+    
     for msg in st.session_state.chat_history:
         st.chat_message(msg['role']).write(msg['content'])
+    
     user_input = st.chat_input("How are you feeling today? Or ask for support...")
     if user_input:
         st.session_state.chat_history.append({"role": "user", "content": user_input})
@@ -2724,9 +2663,11 @@ def show_chatbot_section():
                 )
                 bot_reply = response.choices[0].message.content
             except Exception as e:
-                bot_reply = f"Sorry, there was an error: {e}"
+                bot_reply = get_fallback_response(user_input)
+        
         st.session_state.chat_history.append({"role": "assistant", "content": bot_reply})
         st.chat_message("assistant").write(bot_reply)
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
